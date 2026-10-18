@@ -15,33 +15,49 @@
 @{
 
     var current = (MatchStatus?)ViewBag.CurrentStatus;
+    var currentSearch = (string?)ViewBag.CurrentSearch;
 
 }
 
+<form asp-action="Index" method="get" class="row g-2 mb-3">
+    <div class="col-sm-8 col-md-6">
+        <label for="search" class="visually-hidden">Buscar equipo</label>
+        <input id="search" name="search" type="search" value="@currentSearch"
+               class="form-control" placeholder="Buscar por equipo" />
+    </div>
+    @if (current.HasValue)
+    {
+        <input type="hidden" name="status" value="@current.Value" />
+    }
+    <div class="col-auto">
+        <button type="submit" class="btn btn-success">Buscar</button>
+    </div>
+</form>
+
 <div class="d-flex gap-2 flex-wrap mb-4">
 
-    <a asp-action="Index"
+    <a asp-action="Index" asp-route-search="@currentSearch"
        class="btn btn-sm @(current is null ? "btn-success" : "btn-outline-success")">
 
         Todos
 
     </a>
 
-    <a asp-action="Index" asp-route-status="@MatchStatus.Scheduled"
+    <a asp-action="Index" asp-route-status="@MatchStatus.Scheduled" asp-route-search="@currentSearch"
        class="btn btn-sm @(current == MatchStatus.Scheduled ? "btn-success" : "btn-outline-success")">
 
         Programados
 
     </a>
 
-    <a asp-action="Index" asp-route-status="@MatchStatus.InProgress"
+    <a asp-action="Index" asp-route-status="@MatchStatus.InProgress" asp-route-search="@currentSearch"
        class="btn btn-sm @(current == MatchStatus.InProgress ? "btn-success" : "btn-outline-success")">
 
         En juego
 
     </a>
 
-    <a asp-action="Index" asp-route-status="@MatchStatus.Finished"
+    <a asp-action="Index" asp-route-status="@MatchStatus.Finished" asp-route-search="@currentSearch"
        class="btn btn-sm @(current == MatchStatus.Finished ? "btn-success" : "btn-outline-success")">
 
         Finalizados
@@ -66,6 +82,8 @@
 
   
 
+@if (Model.Any())
+{
 <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
 
     @foreach (var match in Model)
@@ -221,4 +239,20 @@
 
     }
 
-</div> 
+</div>
+}
+else
+{
+    <div class="alert alert-info" role="status">
+        @if (string.IsNullOrWhiteSpace(currentSearch))
+        {
+            <p class="mb-2">No hay partidos disponibles con los filtros seleccionados.</p>
+        }
+        else
+        {
+            <p class="mb-2">No hay partidos para el equipo &quot;@currentSearch&quot; con los filtros seleccionados.</p>
+        }
+
+        <a asp-action="Index" class="btn btn-outline-success">Volver a la cartelera de partidos</a>
+    </div>
+}
