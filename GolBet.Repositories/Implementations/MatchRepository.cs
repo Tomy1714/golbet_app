@@ -68,4 +68,11 @@ public class MatchRepository : GenericRepository<Match>, IMatchRepository
 
             .FirstOrDefaultAsync(m => m.Id == id);
 
+    public async Task<Match?> GetByIdWithTeamsAsync(int id)
+        => await _dbSet
+            .Include(m => m.HomeTeam)
+            .Include(m => m.AwayTeam)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(m => m.Id == id);
+
 }

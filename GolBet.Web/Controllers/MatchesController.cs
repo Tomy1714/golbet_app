@@ -1,9 +1,10 @@
 ﻿// GolBet.Web/Controllers/MatchesController.cs  (versión completa) 
 
 using GolBet.Entities.Enums;
+using GolBet.Repositories.Data;
 using GolBet.Services.DTOs;
 using GolBet.Services.Interfaces;
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -61,6 +62,9 @@ public class MatchesController : Controller
         return View(match);
 
     }
+
+
+    [Authorize(Roles = DbSeeder.AdminRole)]
     // GET /Matches/Create 
 
     public async Task<IActionResult> Create()
@@ -73,6 +77,8 @@ public class MatchesController : Controller
 
     }
 
+
+    [Authorize(Roles = DbSeeder.AdminRole)]
 
 
     [HttpPost, ValidateAntiForgeryToken]
@@ -121,6 +127,8 @@ public class MatchesController : Controller
 
 
 
+    [Authorize(Roles = DbSeeder.AdminRole)]
+
     // GET /Matches/Edit/5 
 
     public async Task<IActionResult> Edit(int id)
@@ -140,6 +148,8 @@ public class MatchesController : Controller
     }
 
 
+
+    [Authorize(Roles = DbSeeder.AdminRole)]
 
     // POST /Matches/Edit 
 
@@ -188,6 +198,8 @@ public class MatchesController : Controller
     }
 
 
+
+    [Authorize(Roles = DbSeeder.AdminRole)]
 
     // POST /Matches/Deactivate/5 
 
